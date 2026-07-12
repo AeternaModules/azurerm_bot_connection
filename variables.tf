@@ -5,6 +5,8 @@ Required:
     - bot_name
     - client_id
     - client_secret
+    - client_secret_key_vault_id (alternative to client_secret - read from Key Vault instead)
+    - client_secret_key_vault_secret_name (alternative to client_secret - read from Key Vault instead)
     - location
     - name
     - resource_group_name
@@ -15,15 +17,17 @@ Optional:
 EOT
 
   type = map(object({
-    bot_name              = string
-    client_id             = string
-    client_secret         = string
-    location              = string
-    name                  = string
-    resource_group_name   = string
-    service_provider_name = string
-    parameters            = optional(map(string))
-    scopes                = optional(string)
+    bot_name                            = string
+    client_id                           = string
+    client_secret                       = string
+    client_secret_key_vault_id          = optional(string)
+    client_secret_key_vault_secret_name = optional(string)
+    location                            = string
+    name                                = string
+    resource_group_name                 = string
+    service_provider_name               = string
+    parameters                          = optional(map(string))
+    scopes                              = optional(string)
   }))
   validation {
     condition = alltrue([
