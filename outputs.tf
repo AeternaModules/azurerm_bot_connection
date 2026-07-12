@@ -1,3 +1,7 @@
+output "bot_connections_id" {
+  description = "Map of id values across all bot_connections, keyed the same as var.bot_connections"
+  value       = { for k, v in azurerm_bot_connection.bot_connections : k => v.id }
+}
 output "bot_connections_bot_name" {
   description = "Map of bot_name values across all bot_connections, keyed the same as var.bot_connections"
   value       = { for k, v in azurerm_bot_connection.bot_connections : k => v.bot_name }
