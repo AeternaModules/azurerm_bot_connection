@@ -5,8 +5,8 @@ Required:
     - bot_name
     - client_id
     - client_secret
-    - client_secret_key_vault_id (alternative to client_secret - read from Key Vault instead)
-    - client_secret_key_vault_secret_name (alternative to client_secret - read from Key Vault instead)
+    - client_secret_key_vault_id (optional, alternative to client_secret)
+    - client_secret_key_vault_secret_name (optional, alternative to client_secret)
     - location
     - name
     - resource_group_name
@@ -29,58 +29,13 @@ EOT
     parameters                          = optional(map(string))
     scopes                              = optional(string)
   }))
-  validation {
-    condition = alltrue([
-      for k, v in var.bot_connections : (
-        length(v.name) > 0
-      )
-    ])
-    error_message = "must not be empty"
-  }
-  validation {
-    condition = alltrue([
-      for k, v in var.bot_connections : (
-        length(v.bot_name) > 0
-      )
-    ])
-    error_message = "must not be empty"
-  }
-  validation {
-    condition = alltrue([
-      for k, v in var.bot_connections : (
-        length(v.service_provider_name) > 0
-      )
-    ])
-    error_message = "must not be empty"
-  }
-  validation {
-    condition = alltrue([
-      for k, v in var.bot_connections : (
-        length(v.client_id) > 0
-      )
-    ])
-    error_message = "must not be empty"
-  }
-  validation {
-    condition = alltrue([
-      for k, v in var.bot_connections : (
-        length(v.client_secret) > 0
-      )
-    ])
-    error_message = "must not be empty"
-  }
-  validation {
-    condition = alltrue([
-      for k, v in var.bot_connections : (
-        v.scopes == null || (length(v.scopes) > 0)
-      )
-    ])
-    error_message = "must not be empty"
-  }
   # --- Unconfirmed validation candidates, derived from azurerm_bot_connection's provider source ---
   # Not auto-enabled: either a bespoke provider validator we can't safely translate,
   # or a path that crosses a list-typed block (needs its own for_each wrapping).
   # Review, translate into a real validation{} block above, and delete once confirmed.
+  # path: name
+  #   condition: length(value) > 0
+  #   message:   must not be empty
   # path: location
   #   source:    location.EnhancedValidate: no recognizable `if ... { errors = append(...) }` pattern - read it by hand
   # path: resource_group_name
@@ -97,5 +52,20 @@ EOT
   #   source:    [from resourcegroups.ValidateName: invalid when len(value) == 0]
   # path: resource_group_name
   #   source:    [from resourcegroups.ValidateName] !matched
+  # path: bot_name
+  #   condition: length(value) > 0
+  #   message:   must not be empty
+  # path: service_provider_name
+  #   condition: length(value) > 0
+  #   message:   must not be empty
+  # path: client_id
+  #   condition: length(value) > 0
+  #   message:   must not be empty
+  # path: client_secret
+  #   condition: length(value) > 0
+  #   message:   must not be empty
+  # path: scopes
+  #   condition: length(value) > 0
+  #   message:   must not be empty
 }
 
